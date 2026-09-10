@@ -33,20 +33,21 @@ public class AttendanceController {
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
-	 * @param lmsUserId
-	 * @param courseId
-	 * @param model
+	 * @param model ビューに渡す値を格納するModel
 	 * @return 勤怠管理画面
-	 * @throws ParseException
+	 * @throws ParseException 未入力チェックでの日付変換に失敗した場合
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(Model model) throws ParseException {
 
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
+		// 過去日の入力チェック
+		boolean isNotEnterPastDate = studentAttendanceService.notEnterCheck();
+		model.addAttribute("isNotEnterPastDate", isNotEnterPastDate);
 		return "attendance/detail";
 	}
 
