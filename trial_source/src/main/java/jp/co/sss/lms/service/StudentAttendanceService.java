@@ -352,6 +352,6 @@ public class StudentAttendanceService {
 
 		//0より大きければtrue、それ以外はfalse
 		return count > 0;
-	}
 
+	}
 }
