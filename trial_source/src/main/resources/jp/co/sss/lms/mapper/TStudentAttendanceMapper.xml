@@ -96,9 +96,9 @@
 		AND
 			delete_flg = #{deleteFlg}
 		AND
-			training_date &lt; #{trainingDate}
+			<![CDATA[ training_date < #{trainingDate} ]]>
 		AND
-			status != 1
+			status != 1 <!-- 1: 欠席ステータス（欠席は除外） -->
 		AND(
 			training_start_time = ''
 		OR
