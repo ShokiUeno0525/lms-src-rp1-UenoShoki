@@ -133,6 +133,9 @@ public class AttendanceController {
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
+		
+		// Task.26 プルダウンで選ばれた時・分を、"HH:mm"形式に変換する
+	    studentAttendanceService.formatConversion(attendanceForm);
 
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
