@@ -243,6 +243,18 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+			//task.26 出退勤時間を「時間」「分」に分解して、プルダウンの初期値としてセット。
+			//出勤時間（時間・分）
+			dailyAttendanceForm.setTrainingStartTimeHour( 
+					attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime())); //DTOから出勤時間の文字列を取り出す
+			dailyAttendanceForm.setTrainingStartTimeMinute(
+					attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
+			//退勤時間（時間・分）
+			dailyAttendanceForm.setTrainingEndTimeHour(
+					attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
+			dailyAttendanceForm.setTrainingEndTimeMinute(
+					attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
+			
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -380,6 +392,7 @@ public class StudentAttendanceService {
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
 
+	//task.25
 	public boolean notEnterCheck() throws ParseException {
 
 		//フォーマットパターンを設定。

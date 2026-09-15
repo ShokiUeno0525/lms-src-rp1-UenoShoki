@@ -130,19 +130,20 @@ public class AttendanceController {
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 */
-	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
+	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST) //更新ボタン（complete）が押された時に起動
+	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result) //
 			throws ParseException {
 		
-		// Task.26 プルダウンで選ばれた時・分を、"HH:mm"形式に変換する
+		// Task.26 プルダウンで選ばれた時・分を、"HH:mm"形式の文字列に結合してattendanceFormに再セットする。
 	    studentAttendanceService.formatConversion(attendanceForm);
 
-		// 更新
+		// updateメソッドを呼び出してDBの勤怠データを更新し、完了メッセージを取得。modelに完了メッセージを登録。
 		String message = studentAttendanceService.update(attendanceForm);
 		model.addAttribute("message", message);
-		// 一覧の再取得
+		// 更新後の最新状態を画面に反映させるため、ログインユーザーのコースＩＤとユーザーＩＤをキーにして、勤怠一覧データをＤＢから再取得。
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+		// 再取得した最新の勤怠一覧データを画面表示用にmodelに登録する。
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		return "attendance/detail";

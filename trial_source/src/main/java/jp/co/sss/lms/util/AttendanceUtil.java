@@ -147,6 +147,7 @@ public class AttendanceUtil {
 		return false;
 	}
 
+	//task.26 勤怠時間の編集方法変更
 	/**
 	 * 時間マップを取得
 	 * 
@@ -162,6 +163,7 @@ public class AttendanceUtil {
 
 	}
 
+	//task.26
 	/**
 	 * 分マップ(0～59)を取得
 	 * 
@@ -176,6 +178,7 @@ public class AttendanceUtil {
 		return map;
 	}
 	
+	//task.26
 	/**
 	 * 時刻文字列("HH:mm")から「時間」を抽出する。
 	 *
@@ -195,6 +198,7 @@ public class AttendanceUtil {
 	    }
 	}
 	
+	//task.26
 	/**
 	 * 時刻文字列("HH:mm")から「分」を抽出する。
 	 *
