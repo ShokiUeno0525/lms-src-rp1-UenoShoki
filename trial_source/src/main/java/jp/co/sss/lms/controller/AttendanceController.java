@@ -134,6 +134,9 @@ public class AttendanceController {
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST) //更新ボタン（complete）が押された時に起動
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result) //
 			throws ParseException {
+		
+		// Task.26 プルダウンで選ばれた時・分を、"HH:mm"形式の文字列に結合してattendanceFormに再セットする。
+	    studentAttendanceService.formatConversion(attendanceForm);
 
 		// Task.26 プルダウンで選ばれた時・分を、"HH:mm"形式の文字列に結合してattendanceFormに再セットする。
 		studentAttendanceService.formatConversion(attendanceForm);
