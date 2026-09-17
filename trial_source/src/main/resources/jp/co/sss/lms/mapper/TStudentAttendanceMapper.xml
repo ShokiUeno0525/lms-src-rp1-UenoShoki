@@ -86,7 +86,7 @@
 		WHERE student_attendance_id = #{studentAttendanceId}
 	</update>
 	
-	<select id="notEnterCount" resultType="int">
+	<select id="notEnterCount" resultType="Integer">
 		SELECT
 			COUNT(*)
 		FROM

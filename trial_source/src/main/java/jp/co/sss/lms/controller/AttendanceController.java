@@ -30,6 +30,7 @@ public class AttendanceController {
 	@Autowired
 	private LoginUserDto loginUserDto;
 
+	//task.25
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
@@ -133,9 +134,9 @@ public class AttendanceController {
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST) //更新ボタン（complete）が押された時に起動
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result) //
 			throws ParseException {
-		
+
 		// Task.26 プルダウンで選ばれた時・分を、"HH:mm"形式の文字列に結合してattendanceFormに再セットする。
-	    studentAttendanceService.formatConversion(attendanceForm);
+		studentAttendanceService.formatConversion(attendanceForm);
 
 		// updateメソッドを呼び出してDBの勤怠データを更新し、完了メッセージを取得。modelに完了メッセージを登録。
 		String message = studentAttendanceService.update(attendanceForm);
