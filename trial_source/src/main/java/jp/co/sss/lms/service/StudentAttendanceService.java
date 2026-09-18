@@ -416,10 +416,29 @@ public class StudentAttendanceService {
 	}
 
 	//task.27
+	/**
+	 * 勤怠更新時の入力チェック(バリデーション)を行う
+	 * 
+	 * <p>画面から送信された勤怠入力データに対し、以下の検証を各行ごとに行い、
+	 * エラーが存在する場合は{@link BindingResult]にエラー情報を登録します。</p>
+	 * <ul>
+	 * 	<li>備考の文字数チェック(100文字以内)</li>
+	 *  <li>時刻の片側未入力チェック(時間のみ、分のみの入力防止)</li>
+	 *  <li>「出勤なし・退勤あり」の矛盾チェック</li>
+	 *  <li>出勤時刻、退勤時刻の逆転チェック</li>
+	 *  <li>中抜け時間が勤務時間(出勤～退勤)を超えていないかのチェック</li>
+	 * </ul>
+	 * 
+	 * @param attendanceForm 画面から送信された勤怠情報フォーム
+	 * @param result バリデーション結果を格納する BindingResult オブジェクト
+	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
-		// インデックス管理用の変数（エラーの一要素を特定するため）
-		int index = 0;
-		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+		List<DailyAttendanceForm> attendanceList=attendanceForm.getAttendanceList();
+		if(attendanceList == null ){
+			return;
+		}
+		for(int i = 0; i < attendanceList.size(); i++) {
+			DailyAttendanceForm dailyAttendanceForm = attendanceList.get(i);
 
 			String note = dailyAttendanceForm.getNote();
 			Integer startHour = dailyAttendanceForm.getTrainingStartTimeHour();
@@ -430,26 +449,26 @@ public class StudentAttendanceService {
 
 			// a.備考の文字数チェック(>100)
 			if (note != null && note.length() > 100) {
-				result.rejectValue("attendanceList[" + index + "]).note", "maxlength", new Object[] { "備考", "100" },
+				result.rejectValue("attendanceList[" + i + "]).note", "maxlength", new Object[] { "備考", "100" },
 						null);
 			}
 
 			//b. 出勤時間の片側未入力チェック
 			if ((startHour != null && startMin == null) || (startHour == null && startMin != null)) {
-				result.rejectValue("attendanceList[" + index + "].trainingStartTimeHour", "input.invalid",
+				result.rejectValue("attendanceList[" + i + "].trainingStartTimeHour", "input.invalid",
 						new Object[] { "出勤時間" }, null);
 			}
 
 			//c. 退勤時間の片側未入力チェック
 			if ((endHour != null && endMin == null) || (endHour == null && endMin != null)) {
-				result.rejectValue("attendanceList[" + index + "].trainingEndTimeHour", "input.invalid",
+				result.rejectValue("attendanceList[" + i + "].trainingEndTimeHour", "input.invalid",
 						new Object[] { "退勤時間" }, null);
 			}
 			//d. 出勤時間なし＆退勤時間ありの矛盾チェック
 			boolean isStartEmpty = (startHour == null && startMin == null);
 			boolean isEndEntered = (endHour != null && endMin !=null);
 			if(isStartEmpty && isEndEntered) {
-				result.rejectValue("attendanceList[" + index + "].trainingStartTomeHour", "attendance.punchInEmpty", null , null);	
+				result.rejectValue("attendanceList[" + i + "].trainingStartTomeHour", "attendance.punchInEmpty", null , null);	
 			}
 			
 			// 出勤・退勤の両方が時間・分ともにそろっている場合のみ時刻計算を行う
@@ -462,18 +481,17 @@ public class StudentAttendanceService {
 				
 				//e. 出勤時間>退勤時間の比較チェック
 				if(startTotalMin > endTotalMin) {
-					result.rejectValue("attendanceList[" + index + "].trainingStartTimeHour", "attendance.trainingTimeRange", new Object[] { index }, null);
+					result.rejectValue("attendanceList[" + i + "].trainingStartTimeHour", "attendance.trainingTimeRange", new Object[] { i }, null);
 				} else {
 					// f. 中抜け時間が勤務時間(出勤〜退勤)を超えるかチェック
 					if (blankTime != null) {
 	                    int workTimeMin = endTotalMin - startTotalMin;
 	                    if (blankTime > workTimeMin) {
-	                        result.rejectValue("attendanceList[" + index + "].blankTime", "attendance.blankTimeError", null, null);
+	                        result.rejectValue("attendanceList[" + i + "].blankTime", "attendance.blankTimeError", null, null);
 	                    }
 	                }
 				}
 			}
-			index++;
 
 		}
 
