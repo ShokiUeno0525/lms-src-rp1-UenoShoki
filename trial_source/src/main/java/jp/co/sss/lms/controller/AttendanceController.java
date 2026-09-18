@@ -47,7 +47,7 @@ public class AttendanceController {
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		// 過去日の入力チェック
-		boolean isNotEnterPastDate = studentAttendanceService.notEnterCheck();
+		Boolean isNotEnterPastDate = studentAttendanceService.notEnterCheck();
 		model.addAttribute("isNotEnterPastDate", isNotEnterPastDate);
 		return "attendance/detail";
 	}

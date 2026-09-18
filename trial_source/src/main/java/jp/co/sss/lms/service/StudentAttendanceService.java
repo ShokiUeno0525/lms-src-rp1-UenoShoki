@@ -401,7 +401,7 @@ public class StudentAttendanceService {
 	 * @return 未入力の勤怠データが存在する場合はtrue、存在しない場合はfalse
 	 * @throws ParseException　日付パースの処理に失敗した場合
 	 */
-	public boolean notEnterCheck() throws ParseException {
+	public Boolean notEnterCheck() throws ParseException {
 
 		//Utilから時刻をリセットした本日日付を取得
 		Date trainingDate = attendanceUtil.getTrainingDate();
