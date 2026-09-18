@@ -221,7 +221,7 @@ public class StudentAttendanceService {
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 
-		//Task.26 時間マップと分マップを生成してフォームセット
+		//Task.26 上野 時間マップと分マップを生成してフォームセット
 		attendanceForm.setHourMap(attendanceUtil.getHourMap());
 		attendanceForm.setMinuteMap(attendanceUtil.getMinuteMap());
 
@@ -243,7 +243,7 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
-			//task.26 出退勤時間を「時間」「分」に分解して、プルダウンの初期値としてセット。
+			//task.26 上野 出退勤時間を「時間」「分」に分解して、プルダウンの初期値としてセット。
 			//出勤時間（時間・分）
 			dailyAttendanceForm.setTrainingStartTimeHour(
 					attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime())); //DTOから出勤時間の文字列を取り出す
@@ -283,6 +283,7 @@ public class StudentAttendanceService {
 	 * "HH:mm"形式に整形して、対応する時刻フィールドにセットする。
 	 * 
 	 * @param attendanceForm 勤怠フォーム
+	 * @author 上野
 	 */
 	public void formatConversion(AttendanceForm attendanceForm) {
 		//リストがなければ何もしない
@@ -400,6 +401,7 @@ public class StudentAttendanceService {
 	 * 勤怠データが存在するかどうかを確認します。
 	 * @return 未入力の勤怠データが存在する場合はtrue、存在しない場合はfalse
 	 * @throws ParseException　日付パースの処理に失敗した場合
+	 * @author 上野
 	 */
 	public Boolean notEnterCheck() throws ParseException {
 
@@ -431,6 +433,7 @@ public class StudentAttendanceService {
 	 * 
 	 * @param attendanceForm 画面から送信された勤怠情報フォーム
 	 * @param result バリデーション結果を格納する BindingResult オブジェクト
+	 * @author 上野
 	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
 		List<DailyAttendanceForm> attendanceList=attendanceForm.getAttendanceList();
