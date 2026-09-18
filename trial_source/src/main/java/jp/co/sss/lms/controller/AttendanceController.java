@@ -46,7 +46,7 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		// task.25 上野 過去日の入力チェック
+		// 上野 翔輝 - task.25 過去日の入力チェック
 		Boolean isNotEnterPastDate = studentAttendanceService.notEnterCheck();
 		model.addAttribute("isNotEnterPastDate", isNotEnterPastDate);
 		return "attendance/detail";

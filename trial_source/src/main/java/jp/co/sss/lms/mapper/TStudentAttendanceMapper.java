@@ -72,7 +72,7 @@ public interface TStudentAttendanceMapper {
 	 * @param deleteFlg 削除フラグ
 	 * @param trainingDate 比較対象の日付（基準となる現在日付）
 	 * @return 勤怠未入力件数
-	 * @author 上野
+	 * @author 上野 翔輝 - task.25
 	 */
 	Integer notEnterCount(@Param("lmsUserId") Integer lmsUserId,
 			@Param("deleteFlg") Short deleteFlg,
