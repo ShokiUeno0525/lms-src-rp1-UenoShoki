@@ -14,6 +14,7 @@ import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
+import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
 
 /**
@@ -29,6 +30,8 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
+	@Autowired
+	private AttendanceUtil attendanceUtil;
 
 	//task.25
 	/**
@@ -132,11 +135,23 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST) //更新ボタン（complete）が押された時に起動
-	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result) //
+	public String complete(AttendanceForm attendanceForm, BindingResult result, Model model) //
 			throws ParseException {
 
 		// Task.26 プルダウンで選ばれた時・分を、"HH:mm"形式の文字列に結合してattendanceFormに再セットする。
 		studentAttendanceService.formatConversion(attendanceForm);
+		
+		// task.27 - 上野 翔輝 入力チェックの実行。
+		studentAttendanceService.updateInputCheck(attendanceForm, result);
+		// task.27 - 上野 翔輝 入力チェックエラーが存在する場合。
+		if(result.hasErrors()) {
+			// 選択肢用マップを勤怠Utilから取得してFormに設定
+			attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+	        attendanceForm.setHourMap(attendanceUtil.getHourMap());
+	        attendanceForm.setMinuteMap(attendanceUtil.getMinuteMap());
+		
+			return "attendance/update";
+		}
 
 		// updateメソッドを呼び出してDBの勤怠データを更新し、完了メッセージを取得。modelに完了メッセージを登録。
 		String message = studentAttendanceService.update(attendanceForm);
@@ -149,5 +164,7 @@ public class AttendanceController {
 
 		return "attendance/detail";
 	}
+	
+	
 
 }
