@@ -416,7 +416,6 @@ public class StudentAttendanceService {
 
 	}
 
-	//task.27
 	/**
 	 * 勤怠更新時の入力チェック(バリデーション)を行う
 	 * 
@@ -432,7 +431,7 @@ public class StudentAttendanceService {
 	 * 
 	 * @param attendanceForm 画面から送信された勤怠情報フォーム
 	 * @param result バリデーション結果を格納する BindingResult オブジェクト
-	 * @author 上野
+	 * @author 上野 - task.27
 	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
 		List<DailyAttendanceForm> attendanceList = attendanceForm.getAttendanceList();
@@ -441,6 +440,7 @@ public class StudentAttendanceService {
 		}
 		for (int i = 0; i < attendanceList.size(); i++) {
 			DailyAttendanceForm dailyAttendanceForm = attendanceList.get(i);
+			
 			String path = "attendanceList[" + i + "]";
 
 			String note = dailyAttendanceForm.getNote();
@@ -456,13 +456,23 @@ public class StudentAttendanceService {
 			}
 
 			// b. 出勤時間の片側未入力チェック
-			if ((startHour == null) != (startMin == null)) {
-				result.rejectValue(path + ".trainingStartTimeHour", "input.invalid", new Object[] { "出勤時間" }, null);
+			if (startHour != null && startMin == null) {
+			    // 「時」だけ入力 → 空になっている「分」を赤くする
+			    result.rejectValue(path + ".trainingStartTimeMinute", "input.invalid",
+			            new Object[] { "出勤時間" }, null);
+			} else if (startHour == null && startMin != null) {
+			    // 「分」だけ入力 → 空になっている「時」を赤くする
+			    result.rejectValue(path + ".trainingStartTimeHour", "input.invalid",
+			            new Object[] { "出勤時間" }, null);
 			}
 
 			// c. 退勤時間の片側未入力チェック
-			if ((endHour == null) != (endMin == null)) {
-				result.rejectValue(path + ".trainingEndTimeHour", "input.invalid", new Object[] { "退勤時間" }, null);
+			if (endHour != null && endMin == null) {
+			    result.rejectValue(path + ".trainingEndTimeMinute", "input.invalid",
+			            new Object[] { "退勤時間" }, null);
+			} else if (endHour == null && endMin != null) {
+			    result.rejectValue(path + ".trainingEndTimeHour", "input.invalid",
+			            new Object[] { "退勤時間" }, null);
 			}
 
 			boolean isStartEmpty = (startHour == null && startMin == null);
@@ -482,8 +492,9 @@ public class StudentAttendanceService {
 			int startTotalMin = startHour * 60 + startMin;
 			int endTotalMin = endHour * 60 + endMin;
 
+			// e. 出勤時間>退勤時間の比較チェック
 			if (startTotalMin > endTotalMin) {
-				// e. 出勤時間>退勤時間の比較チェック
+				
 				result.rejectValue(path + ".trainingStartTimeHour", "attendance.trainingTimeRange", new Object[] { i },
 						null);
 			} else if (blankTime != null && blankTime > endTotalMin - startTotalMin) {
