@@ -495,7 +495,7 @@ public class StudentAttendanceService {
 			// e. 出勤時間>退勤時間の比較チェック
 			if (startTotalMin > endTotalMin) {
 				
-				result.rejectValue(path + ".trainingStartTimeHour", "attendance.trainingTimeRange", new Object[] { i },
+				result.rejectValue(path + ".trainingStartTimeHour", "attendance.trainingTimeRange", new Object[] { "i" },
 						null);
 			} else if (blankTime != null && blankTime > endTotalMin - startTotalMin) {
 				// f. 中抜け時間が勤務時間(出勤〜退勤)を超えるかチェック

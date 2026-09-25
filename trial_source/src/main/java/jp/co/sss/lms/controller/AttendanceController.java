@@ -143,11 +143,6 @@ public class AttendanceController {
 		
 		// task.27 - 上野 翔輝 入力チェックの実行。
 		studentAttendanceService.updateInputCheck(attendanceForm, result);
-		// task.27 - 上野 翔輝 入力チェックエラーが存在する場合。
-		
-		for (org.springframework.validation.FieldError fe : result.getFieldErrors()) {
-			System.out.println("★field=[" + fe.getField() + "] code=" + fe.getCode());
-		}
 		
 		if(result.hasErrors()) {
 			// 選択肢用マップを勤怠Utilから取得してFormに設定
